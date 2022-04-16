@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ITManToken is ERC20, Ownable {
-	constructor() ERC20("ITManToken", "ITM") {
+	constructor() ERC20("BitFuel", "BFUEL") {
 		_mint(msg.sender, 1000000 * 10**decimals());
 	}
 
