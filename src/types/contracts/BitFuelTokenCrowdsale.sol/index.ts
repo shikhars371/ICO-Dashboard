@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { BitFuelCrowdsale } from "./BitFuelCrowdsale";
+export type { BitFuelTokenCrowdsale } from "./BitFuelTokenCrowdsale";

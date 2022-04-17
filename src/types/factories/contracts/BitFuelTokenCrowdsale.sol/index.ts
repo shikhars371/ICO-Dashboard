@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { BitFuelCrowdsale__factory } from "./BitFuelCrowdsale__factory";
+export { BitFuelTokenCrowdsale__factory } from "./BitFuelTokenCrowdsale__factory";

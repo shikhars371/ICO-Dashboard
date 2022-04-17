@@ -37,9 +37,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.BitFuelToken__factory>;
     getContractFactory(
-      name: "BitFuelCrowdsale",
+      name: "BitFuelTokenCrowdsale",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.BitFuelCrowdsale__factory>;
+    ): Promise<Contracts.BitFuelTokenCrowdsale__factory>;
     getContractFactory(
       name: "Box",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -92,10 +92,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.BitFuelToken>;
     getContractAt(
-      name: "BitFuelCrowdsale",
+      name: "BitFuelTokenCrowdsale",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.BitFuelCrowdsale>;
+    ): Promise<Contracts.BitFuelTokenCrowdsale>;
     getContractAt(
       name: "Box",
       address: string,
