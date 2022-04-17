@@ -1,4 +1,4 @@
-# Welcome to dapp-token-ico 👋
+# BitFuel Token Sale Dashboard and Contracts 👋
 
 ![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
