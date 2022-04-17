@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "npx hardhat compile --network localhost && tsc && vite build",
+    "build": "npx hardhat compile --network ropsten && tsc && vite build",
     "serve": "vite preview",
     "prepare": "husky install",
     "lint:sol": "npx solhint 'contracts/**/*.sol'",
