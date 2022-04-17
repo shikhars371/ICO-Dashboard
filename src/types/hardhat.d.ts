@@ -33,6 +33,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AllowanceCrowdsale__factory>;
     getContractFactory(
+      name: "BitFuelToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.BitFuelToken__factory>;
+    getContractFactory(
+      name: "BitFuelCrowdsale",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.BitFuelCrowdsale__factory>;
+    getContractFactory(
       name: "Box",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Box__factory>;
@@ -48,14 +56,6 @@ declare module "hardhat/types/runtime" {
       name: "Greeter",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Greeter__factory>;
-    getContractFactory(
-      name: "BitFuelToken",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.BitFuelToken__factory>;
-    getContractFactory(
-      name: "BitFuelTokenCrowdsale",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.BitFuelTokenCrowdsale__factory>;
     getContractFactory(
       name: "TimedCrowdsale",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -87,6 +87,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.AllowanceCrowdsale>;
     getContractAt(
+      name: "BitFuelToken",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.BitFuelToken>;
+    getContractAt(
+      name: "BitFuelCrowdsale",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.BitFuelCrowdsale>;
+    getContractAt(
       name: "Box",
       address: string,
       signer?: ethers.Signer
@@ -106,16 +116,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Greeter>;
-    getContractAt(
-      name: "BitFuelToken",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.BitFuelToken>;
-    getContractAt(
-      name: "BitFuelTokenCrowdsale",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.BitFuelTokenCrowdsale>;
     getContractAt(
       name: "TimedCrowdsale",
       address: string,
