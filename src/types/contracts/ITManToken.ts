@@ -28,7 +28,7 @@ import type {
   utils,
 } from "ethers";
 
-export interface ITManTokenInterface extends utils.Interface {
+export interface BitFuelTokenInterface extends utils.Interface {
   functions: {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
@@ -193,12 +193,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface ITManToken extends BaseContract {
+export interface BitFuelToken extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ITManTokenInterface;
+  interface: BitFuelTokenInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

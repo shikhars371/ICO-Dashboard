@@ -5,10 +5,10 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useQuery } from "react-query";
 
-import ITManTokenArtifacts from "./artifacts/contracts/ITManToken.sol/ITManToken.json";
-import ITManTokenCrowdsaleArtifacts from "./artifacts/contracts/ITManTokenCrowdsale.sol/ITManTokenCrowdsale.json";
+import BitFuelTokenArtifacts from "./artifacts/contracts/BitFuelToken.sol/BitFuelToken.json";
+import BitFuelTokenCrowdsaleArtifacts from "./artifacts/contracts/BitFuelTokenCrowdsale.sol/BitFuelTokenCrowdsale.json";
 import logger from "./logger";
-import { ITManToken, ITManTokenCrowdsale } from "./types";
+import { BitFuelToken, BitFuelTokenCrowdsale } from "./types";
 
 interface Props {
   crowdsaleAddress: string;
@@ -28,7 +28,7 @@ const TokenInfo = ({ tokenAddress }: { tokenAddress: string }) => {
   const fetchTokenInfo = async () => {
     logger.warn("fetchTokenInfo");
     const provider = library || new ethers.providers.Web3Provider(window.ethereum || providerUrl);
-    const tokenContract = new ethers.Contract(tokenAddress, ITManTokenArtifacts.abi, provider) as ITManToken;
+    const tokenContract = new ethers.Contract(tokenAddress, BitFuelTokenArtifacts.abi, provider) as BitFuelToken;
     const name = await tokenContract.name();
     const symbol = await tokenContract.symbol();
     const decimals = await tokenContract.decimals();
@@ -86,9 +86,9 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
     const provider = library || new ethers.providers.Web3Provider(window.ethereum || providerUrl);
     const contract = new ethers.Contract(
       crowdsaleAddress,
-      ITManTokenCrowdsaleArtifacts.abi,
+      BitFuelTokenCrowdsaleArtifacts.abi,
       provider
-    ) as ITManTokenCrowdsale;
+    ) as BitFuelTokenCrowdsale;
     contract.token().then(setTokenAddress).catch(logger.error);
     contract
       .remainingTokens()
@@ -176,7 +176,7 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
 
         <div className="text-center shadow-2xl card">
           <div className="card-body">
-            <h2 className="card-title">ITMan Token</h2>
+            <h2 className="card-title">BitFuel Token</h2>
             {Number(closingTime) > 0 && (
               <div className="alert">
                 <div className="flex-1">

@@ -6,6 +6,6 @@ export type { Box } from "./Box";
 export type { BoxV2 } from "./BoxV2";
 export type { Crowdsale } from "./Crowdsale";
 export type { Greeter } from "./Greeter";
-export type { ITManToken } from "./ITManToken";
-export type { ITManTokenCrowdsale } from "./ITManTokenCrowdsale";
+export type { BitFuelToken } from "./BitFuelToken";
+export type { BitFuelTokenCrowdsale } from "./BitFuelTokenCrowdsale";
 export type { TimedCrowdsale } from "./TimedCrowdsale";
