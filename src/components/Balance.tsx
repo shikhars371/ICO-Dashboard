@@ -13,6 +13,8 @@ export function Balance() {
       library
         .getBalance(account)
         .then((balance: any) => {
+          console.log("balance",balance.toString());
+          
           if (!stale) {
             setBalance(balance);
           }

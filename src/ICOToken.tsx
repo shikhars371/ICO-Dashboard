@@ -21,19 +21,26 @@ declare global {
 }
 
 const providerUrl = import.meta.env.VITE_PROVIDER_URL;
+const crowdsaleAddress = import.meta.env.VITE_CROWDSALE_ADDRESS;
 
-const TokenInfo = ({ tokenAddress }: { tokenAddress: string }) => {
+
+const TokenInfo = ({ crowdsaleAddress }: { crowdsaleAddress: string }) => {
+
+  console.log("addresssss",crowdsaleAddress,crowdsaleAddress);
+  
   const { library } = useWeb3React();
 
   const fetchTokenInfo = async () => {
     logger.warn("fetchTokenInfo");
     const provider = library || new ethers.providers.Web3Provider(window.ethereum || providerUrl);
-    const tokenContract = new ethers.Contract(tokenAddress, BitFuelTokenArtifacts.abi, provider) as BitFuelToken;
+    const tokenContract = new ethers.Contract(crowdsaleAddress, BitFuelTokenArtifacts.abi, provider) as BitFuelToken;
     const name = await tokenContract.name();
     const symbol = await tokenContract.symbol();
     const decimals = await tokenContract.decimals();
     const totalSupply = await tokenContract.totalSupply();
-    logger.warn("token info", { name, symbol, decimals });
+    console.log("totalsupply",totalSupply.toString());
+    
+    logger.warn("token info", { crowdsaleAddress,name, symbol, decimals });
     return {
       name,
       symbol,
@@ -41,8 +48,8 @@ const TokenInfo = ({ tokenAddress }: { tokenAddress: string }) => {
       totalSupply,
     };
   };
-  const { error, isLoading, data } = useQuery(["token-info", tokenAddress], fetchTokenInfo, {
-    enabled: tokenAddress !== "",
+  const { error, isLoading, data } = useQuery(["token-info", crowdsaleAddress], fetchTokenInfo, {
+    enabled: crowdsaleAddress !== "",
   });
 
   if (error) return <div>failed to load</div>;
@@ -59,7 +66,7 @@ const TokenInfo = ({ tokenAddress }: { tokenAddress: string }) => {
       <div className="shadow stats">
         <div className="stat">
           <div className="stat-title">Total Supply</div>
-          <div className="stat-value">{formatUnits(data?.totalSupply ?? 0)}</div>
+          <div className="stat-value">{formatUnits(data?.totalSupply ?? 0,18)}</div>
         </div>
       </div>
     </div>
@@ -81,26 +88,19 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
   const [amount, setAmount] = useState(1);
 
   // fetch crowdsale token info
-  const fetchCrowdsaleTokenInfo = () => {
+  const fetchCrowdsaleTokenInfo = async () => {
     logger.warn("fetchCrowdsaleTokenInfo");
     const provider = library || new ethers.providers.Web3Provider(window.ethereum || providerUrl);
-    const contract = new ethers.Contract(
-      crowdsaleAddress,
-      BitFuelTokenCrowdsaleArtifacts.abi,
-      provider
-    ) as BitFuelTokenCrowdsale;
-    contract.token().then(setTokenAddress).catch(logger.error);
-    contract
-      .remainingTokens()
-      .then((total) => setAvailableForSale(BigNumber.from(total).toString()))
-      .catch(logger.error);
-    contract
-      .rate()
+    const tokenContract = new ethers.Contract(crowdsaleAddress, BitFuelTokenArtifacts.abi, provider) as BitFuelToken;
+    const totalSupply = await tokenContract.totalSupply();
+    let currentSupply =  await tokenContract.circulatingSupply();
+    let _tSupply = Number(formatEther(BigNumber.from(totalSupply.toString()))) ;
+    let c_supply = Number(formatEther(BigNumber.from(currentSupply.toString())));
+    let availableSupply = _tSupply-c_supply;
+    
+    setAvailableForSale(availableSupply.toString());
+    await tokenContract.rate()
       .then((rate) => setPrice(BigNumber.from(rate).toString()))
-      .catch(logger.error);
-    contract
-      .closingTime()
-      .then((time) => setClosingTime(BigNumber.from(time).toString()))
       .catch(logger.error);
   };
   useEffect(() => {
@@ -122,8 +122,7 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
       }
       const txPrams = {
         to: crowdsaleAddress,
-        value: ethers.BigNumber.from(parseEther(String(1 / Number(price)))).mul(amount),
-        gasLimit: 5000000,
+        value: ethers.BigNumber.from(parseEther(totalCost)),
       };
       logger.warn({ txPrams });
       const transaction = await signer.sendTransaction(txPrams);
@@ -143,7 +142,9 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
     }
   };
 
-  const totalCost = (1 / Number(price)) * amount;
+  const totalCosts = (Number(price)) * amount;
+  const totalCost = formatEther((BigNumber.from(totalCosts.toString()).toString()));
+  
   return (
     <div className="relative py-3 sm:max-w-5xl sm:mx-auto">
       {chainId !== 3 && (
@@ -172,7 +173,7 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
       )}
 
       <div className="flex items-center w-full px-4 py-10 bg-cover card bg-base-200">
-        <TokenInfo tokenAddress={tokenAddress} />
+        <TokenInfo crowdsaleAddress={crowdsaleAddress} />
 
         <div className="text-center shadow-2xl card">
           <div className="card-body">
@@ -202,11 +203,11 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
             <div className="shadow stats">
               <div className="stat">
                 <div className="stat-title">Available for sale</div>
-                <div className="stat-value">{formatUnits(availableForSale, "ether")}</div>
+                <div className="stat-value">{availableForSale}</div>
               </div>
               <div className="stat">
                 <div className="stat-title">Price</div>
-                <div className="stat-value">{formatUnits(price, "wei")} Wei</div>
+                <div className="stat-value">{formatUnits(price, "ether")} eth</div>
               </div>
               <div className="stat">
                 <div className="stat-title">Order Quantity</div>
@@ -216,7 +217,7 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
 
             <input
               type="range"
-              max="1000"
+              max="1000000"
               value={amount}
               onChange={(evt) => setAmount(evt.target.valueAsNumber)}
               className="range range-accent"
@@ -237,7 +238,7 @@ const ICOToken = ({ crowdsaleAddress }: Props) => {
         <div className="items-center justify-center max-w-2xl px-4 py-4 mx-auto text-xl border-orange-500 lg:flex md:flex">
           <div className="p-2 font-semibold">
             <a
-              href={`https://ropsten.etherscan.io/address/${tokenAddress}`}
+              href={`https://ropsten.etherscan.io/address/${crowdsaleAddress}`}
               target="_blank"
               className="px-4 py-1 ml-2 text-white bg-orange-500 rounded-full shadow focus:outline-none"
               rel="noreferrer"
